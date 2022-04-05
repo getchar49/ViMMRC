@@ -193,7 +193,7 @@ def evaluation(epoch):
         all_predictions.append([])
     labels = [x[1] for x in valid_data]
     with torch.no_grad():
-        for i in iter_printer(total, epoch):
+        for i in range(0,total,batch_size):
             seq = [x[0] for x in valid_data[i:i + batch_size]]
             
             attention_mask = [x[2] for x in valid_data[i:i + batch_size]]
@@ -250,7 +250,7 @@ def load_saved_state():
 
 #best_acc = evaluation(-1)
 best_acc = 0.24
-c = 4000
+c = 100
 num = len(data)//c+1
 #num = 16
 #model.load_state_dict(torch.load(os.path.join(args.output_dir,'tmp_model.th')))
@@ -266,7 +266,7 @@ total_loss = record['total_loss']
 print(total_loss)
 for epo in range(cur_epo-1,args.epoch):
     for i in range(cur_i,num):
-      
+    #for i in range(1):  
         data = load_file(os.path.join(data_path,'train.{}.obj'.format(model_type.replace('/', '.'))))[c*i:c*(i+1)]
         train(epo+1,c*i//batch_size)
         state_dict = model.state_dict()

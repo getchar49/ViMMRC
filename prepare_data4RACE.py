@@ -11,7 +11,8 @@ tokenizer = None
 import os
 
 
-def create_obj(data_path):
+def create_obj(data_path,model_type):
+  #global tokenizer
   data = json.load(open(data_path))
   tail = data_path.split('/')[-1].split('.')[0]
   data_path = '/'.join(data_path.split('/')[:-1])
@@ -63,9 +64,11 @@ def create_obj(data_path):
   
   
 def prepare_bert_data(model_type,data_path):
+    global tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(model_type)
     if not os.path.exists(os.path.join(data_path,'test.{}.obj'.format(model_type.replace('/', '.')))):
-      create_obj(os.path.join(data_path,'test.json'))
+      create_obj(os.path.join(data_path,'test.json'),model_type)
     if not os.path.exists(os.path.join(data_path,'dev.{}.obj'.format(model_type.replace('/', '.')))):
-      create_obj(os.path.join(data_path,'dev.json'))
+      create_obj(os.path.join(data_path,'dev.json'),model_type)
     if not os.path.exists(os.path.join(data_path,'train.{}.obj'.format(model_type.replace('/', '.')))):
-      create_obj(os.path.join(data_path,'train.json'))
+      create_obj(os.path.join(data_path,'train.json'),model_type)
